@@ -1,0 +1,3 @@
+cd ISEN-MONGO 
+source /pythonEnv/bin/activate
+python "file to exec"
