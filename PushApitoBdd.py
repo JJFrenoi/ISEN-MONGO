@@ -16,8 +16,10 @@ class PushApitoBdd:
         response = requests.request(
             "GET", dataUrl, headers=headers, data=payload)
         response_json = json.loads(response.text.encode('utf8'))
+        records = response_json.get('records')
         if ville == 'Lille':
                 collection = self.db.Lille
-                result = collection.insert_one(response_json)
-                return result.inserted_id
+                collection.drop()
+                result = collection.insert_many(records)
+                return result.inserted_ids
         return 'failed'
