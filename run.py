@@ -26,4 +26,4 @@ lyon_temps_reel = "https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcd
 lyon_statique = "https://download.data.grandlyon.com/ws/grandlyon/pvo_patrimoine_voirie.pvostationvelov/all.json?maxfeatures=100&start=1"
 
 paris_temps_reel = "https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-disponibilite-en-temps-reel&q=&facet=name&facet=is_installed&facet=is_renting&facet=is_returning&facet=nom_arrondissement_communes"
-paris_statique = "https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-emplacement-des-stations&q=
+paris_statique = "https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-emplacement-des-stations&q="
