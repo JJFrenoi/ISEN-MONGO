@@ -1,6 +1,6 @@
-from PushApitoBdd import PushApitoBdd
+from Bdd import Bdd
 if __name__ == "__main__":
-    push = PushApitoBdd()
+    push = Bdd()
 
     lilleurl = "https://opendata.lillemetropole.fr/api/records/1.0/search/?dataset=vlille-realtime&q=&rows=300&facet=libelle&facet=nom&facet=commune&facet=etat&facet=type&facet=etatconnexion"
     rennes_temps_reel = "https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=etat-des-stations-le-velo-star-en-temps-reel&q=&facet=nom&facet=etat&facet=nombreemplacementsactuels&facet=nombreemplacementsdisponibles&facet=nombrevelosdisponibles"
@@ -20,3 +20,5 @@ if __name__ == "__main__":
     print('id2', id2[0])
     id3 = push.push(reenes_statique, 'Rennes')
     print('id3',id3[0])
+
+    historyWorker = push.refreshAndPush(paris_temps_reel, 'Paris')
