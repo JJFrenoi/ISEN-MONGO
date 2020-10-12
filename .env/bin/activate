@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/jean/ISEN-MONGO/.env"
+VIRTUAL_ENV="/home/jean/BDD/ISEN-MONGO/.env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

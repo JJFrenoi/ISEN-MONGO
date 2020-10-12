@@ -50,10 +50,13 @@ class Bdd:
             if ville == 'Lille' or ville == 'Rennes' or ville == 'Paris' or ville == 'Lyon':
                 records = response_json.get('records')
                 collection = self.db['bicycle_station']
+                collectionVille = self.db[ville]
+                if ville in self.collectionList:
+                    collectionVille.drop()
                 result = []
                 for record in records:
                     fields = record.get('fields')
-                    print(fields)
+                    #print(fields)
                     if (ville == 'Lille'):
                         object = {
                             'geolocations': record.get('geometry'),
@@ -87,6 +90,7 @@ class Bdd:
                             'available': True if (fields.get('status') == 'OPEN') else False
                         }
                     id = collection.insert_one(object)
+                    collectionVille.insert_one(object)
                     result.append(id.inserted_id)
 
             else:
