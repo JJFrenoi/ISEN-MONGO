@@ -5,6 +5,7 @@ import concurrent.futures
 import time
 import threading
 
+
 class Bdd:
 
     def __init__(self):
@@ -15,10 +16,10 @@ class Bdd:
         for col in self.collectionList:
             print(col)
 
-    def userPrograme(self, lat , lon , ville):
+    def userPrograme(self, lat, lon, ville):
         pass
 
-    def threadedRefresh(self, dataUrl , ville):
+    def threadedRefresh(self, dataUrl, ville):
         while True:
             try:
                 print("Starting")
@@ -40,7 +41,7 @@ class Bdd:
                 raise
             finally:
                 time.sleep(60.0)
-        
+
     def threadedPush(self, dataUrl, ville):
         try:
             response = requests.request(
@@ -55,19 +56,35 @@ class Bdd:
             collection = self.db[ville]
             if ville in self.collectionList:
                 collection.drop()
-            result = collection.insert_many(records)
+            result = []
+            for record in records:
+                fields = record.get('fields')
+                print(fields)
+                object = {
+                    'geolocations': fields.get('localisation'),
+                    'size': fields.get('nbvelosdispo')+fields.get('nbplacesdispo'),
+                    'name': fields.get('nom'),
+                    'tpe': fields.get('type'),
+                    'available': fields.get('etat')
+                }
+                id = collection.insert_one(object)
+                result.append(id.inserted_id)
+
+            #result = collection.insert_many(records)
         except Exception as identifier:
             print(identifier)
             return ["failed"]
         finally:
-            return result.inserted_ids
-    
-    def refreshAndPush(self, dataUrl , ville):
-        refreshThread = threading.Thread(target=self.threadedRefresh, args=(dataUrl,ville,))
+            # return result.inserted_ids
+            return result
+
+    def refreshAndPush(self, dataUrl, ville):
+        refreshThread = threading.Thread(
+            target=self.threadedRefresh, args=(dataUrl, ville,))
         refreshThread.start()
 
     def push(self, dataUrl, ville):
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            thread = executor.submit(lambda p: self.threadedPush(*p), [dataUrl,ville])
+            thread = executor.submit(
+                lambda p: self.threadedPush(*p), [dataUrl, ville])
             return thread.result()
-

@@ -14,11 +14,11 @@ if __name__ == "__main__":
 
     id = push.push(lilleurl ,'Lille')
     print('id: ', id[0])
-    id1 = push.push(lyon_statique , 'Lyon')
-    print ('id1', id1[0])
-    id2 = push.push(paris_statique,'Paris')
-    print('id2', id2[0])
-    id3 = push.push(reenes_statique, 'Rennes')
-    print('id3',id3[0])
+    #id1 = push.push(lyon_statique , 'Lyon')
+    #print ('id1', id1[0])
+    #id2 = push.push(paris_statique,'Paris')
+    #print('id2', id2[0])
+    #id3 = push.push(reenes_statique, 'Rennes')
+    #print('id3',id3[0])
 
-    historyWorker = push.refreshAndPush(paris_temps_reel, 'Paris')
+    push.refreshAndPush(paris_temps_reel, 'Paris')
