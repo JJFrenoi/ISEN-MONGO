@@ -16,8 +16,23 @@ class Bdd:
         for col in self.collectionList:
             print(col)
 
-    def userPrograme(self, lat, lon, ville):
-        pass
+    def userPrograme(self, lat, lon, ville, distance):
+        print("User Programme")
+        collection = self.db[ville]
+        collection.create_index([('geolocations', '2dsphere')])
+        listofstand = self.db[ville].find({
+            'geolocations':
+            {'$near':
+                {
+                    '$geometry': {'type': "Point",  'coordinates': [lon, lat]},
+                    '$maxDistance': distance
+                }
+             }
+        })
+        # listofstand = self.db[ville].find(
+        #     {}, {'geolocations.coordinates': [3.130853, 50.63608]})
+        for stand in listofstand:
+            print(stand)
 
     def threadedRefresh(self, dataUrl, ville):
         while True:
@@ -56,7 +71,7 @@ class Bdd:
                 result = []
                 for record in records:
                     fields = record.get('fields')
-                    #print(fields)
+                    # print(fields)
                     if (ville == 'Lille'):
                         object = {
                             'geolocations': record.get('geometry'),
@@ -107,8 +122,8 @@ class Bdd:
         refreshThread = threading.Thread(
             target=self.threadedRefresh, args=(dataUrl, ville,))
         refreshThread.start()
-    
-    def drop(self,collection):
+
+    def drop(self, collection):
         self.db[collection].drop()
 
     def push(self, dataUrl, ville):
