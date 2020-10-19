@@ -1,8 +1,10 @@
 from Bdd import Bdd
+from Business import Business
 import concurrent.futures
 
 if __name__ == "__main__":
     push = Bdd()
+    business = Business()
 
     lilleurl = "https://opendata.lillemetropole.fr/api/records/1.0/search/?dataset=vlille-realtime&q=&rows=300&facet=libelle&facet=nom&facet=commune&facet=etat&facet=type&facet=etatconnexion"
     rennes_temps_reel = "https://data.rennesmetropole.fr/api/records/1.0/search/?dataset=etat-des-stations-le-velo-star-en-temps-reel&q=&facet=nom&facet=etat&facet=nombreemplacementsactuels&facet=nombreemplacementsdisponibles&facet=nombrevelosdisponibles"
@@ -38,3 +40,4 @@ if __name__ == "__main__":
 
     #push.refreshAndPush(paris_temps_reel, 'Paris')
     push.userPrograme(50.63393, 3.061687, 'Lille', 400)
+    business.findByName("HOPITAL")
