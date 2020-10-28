@@ -39,5 +39,7 @@ if __name__ == "__main__":
     #     print('id3:', thread3.result()[0])
 
     #push.refreshAndPush(paris_temps_reel, 'Paris')
-    push.userPrograme(50.63393, 3.061687, 'Lille', 400)
+    #push.userPrograme(50.63393, 3.061687, 'Lille', 400)
+    business.findByName("HOPITAL")
+    business.deletebyName("HOPITAL")
     business.findByName("HOPITAL")
