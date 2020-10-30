@@ -1,2 +1,3 @@
 pythonEnv
-.env
+.env/
+__pycache__/
