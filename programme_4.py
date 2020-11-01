@@ -58,7 +58,8 @@ def ratio_ville():
         {"$match" : {"dayOfWeek" : {"$in" : [1,2,3,4,5]}}},
         {"$group" : {"_id": "$_id",
             "totalv" : {"$sum" : "$bike_available"},
-            "totalp" : {"$sum" : "$stand_available"}
+            "totalp" : {"$sum" : "$stand_available"},
+            "station_id" : {"$first" : "$station_id"}
         } },
         {"$addFields" : {"total" : {"$sum" : ["$totalv", "$totalp"] } } },
         {"$match" : {"total" : {"$gt" : 0} } },
@@ -66,7 +67,14 @@ def ratio_ville():
     ])
     for i in liste:
         if(i['ratio'] <= 0.2) :
-            print('la stration: ', str(i['_id']), ' a un ratio de : ', i['ratio'])
+            recherche = {"_id": i['station_id']}
+            station = stations.find(recherche)
+            if station.count() == 0 :
+                nom_station = str(i['_id'])
+            else:
+                nom_station = station.next()['name']
+            ratio = str(round(float(i['ratio'])*100, 2))
+            print('La station: ', nom_station, ' a un ratio de : ', ratio, '%')
 
 try:
     choix = input("Voulez-vous effectuer une recherche de station [R] ou manipuler une zone [Z] ou voir les stations avec un ratio < 20% [X] : ")
