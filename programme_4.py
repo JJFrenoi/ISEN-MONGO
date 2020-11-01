@@ -49,11 +49,29 @@ def gestion_zone(status):
         stations.update_many(recherche, {"$set": {"available": status}})
     return liste_stations
 
+def ratio_ville():
+    liste = lille.aggregate([
+        {"$addFields" : {"time":{"$toDate" : "$date"}}},
+        {"$addFields" : {"dayOfWeek":{"$isoDayOfWeek" : "$time"}}},
+        {"$addFields" : {"heure":{"$hour" : "$time"}}},
+        {"$match" : {"heure" : {"$in" : [18]}}},
+        {"$match" : {"dayOfWeek" : {"$in" : [1,2,3,4,5]}}},
+        {"$group" : {"_id": "$_id",
+            "totalv" : {"$sum" : "$bike_available"},
+            "totalp" : {"$sum" : "$stand_available"}
+        } },
+        {"$addFields" : {"total" : {"$sum" : ["$totalv", "$totalp"] } } },
+        {"$match" : {"total" : {"$gt" : 0} } },
+        {"$addFields" : {"ratio" : {"$avg" : {"$divide" : ["$totalv", "$total"] } } } },
+    ])
+    for i in liste:
+        if(i['ratio'] <= 0.2) :
+            print('la stration: ', str(i['_id']), ' a un ratio de : ', i['ratio'])
 
 try:
-    choix = input("Voulez-vous effectuer une recherche de station [R] ou manipuler une zone [Z] : ")
-    while choix != 'R' and choix != 'r' and choix != 'Z' and choix != 'z':
-        choix = input("Voulez-vous effectuer une recherche de station [R] ou manipuler une zone [Z] : ")
+    choix = input("Voulez-vous effectuer une recherche de station [R] ou manipuler une zone [Z] ou voir les stations avec un ratio < 20% [X] : ")
+    while choix != 'R' and choix != 'r' and choix != 'Z' and choix != 'z' and choix !='X' and choix != 'x':
+        choix = input("Voulez-vous effectuer une recherche de station [R] ou manipuler une zone [Z] ou voir les stations avec un ratio < 20% [X] : ")
 
     # Recherche de stations
     if choix == 'R' or choix == 'r':
@@ -115,6 +133,8 @@ try:
         stations_changees = gestion_zone(status)
         print("\n Les stations suivantes ont été " + status_texte + " : ")
         print(stations_changees)
+    elif choix == 'X' or choix == 'x':
+        ratio_ville()
 
     print('\n- Fin du programme -')
 except Exception as e:
